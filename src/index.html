@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Task queue scheduling</title>
+
+        <script src="/task-utils.js"></script>
+        <style>
+            .container {
+                font-family: sans-serif;
+                margin: 2em;
+            }
+
+            h2 {
+                margin: 0 0 0.5em;
+            }
+
+            .consoles {
+                display: flex;
+                font-size: 1.25em;
+                line-height: 1.5em;
+            }
+
+            .console {
+                padding: 1em;
+                width: calc(50% - 0.5em);
+                background: #eee;
+                border: 1px solid #ccc;
+                white-space: pre-wrap;
+            }
+
+            .console:not(:last-child) {
+                margin-right: 1em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Task queue scheduling</h1>
+
+            <a href="/task-utils.js" target="_blank" rel="noopener noreferrer">Task Utils (/task-utils.js)</a>
+
+            <div class="consoles">
+                <pre class="console" id="script-console"><h2>Tests ran</h2></pre>
+                <pre class="console" id="output"><h2>Results</h2></pre>
+            </div>
+
+            <h2>Resources</h2>
+
+            <p>
+                MDN Event Loop: 
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop">
+                    https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop
+                </a>
+            </p>
+
+            <p>
+                MDN Microtasks: 
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide">
+                    https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide
+                </a>
+            </p>
+        </div>
+
+        <script>
+            const output = document.getElementById('output');
+            const scriptConsole = document.getElementById('script-console');
+            const start = performance.now();
+
+            const log = (data) => {
+                const entry = `${data} (${(performance.now() - start).toFixed(4)} ms)`;
+                output.innerHTML += entry + "\r\n";
+            };
+
+            setTimeout(() => {
+                const scripts = document.getElementById("scripts").innerHTML;
+                scriptConsole.innerHTML += scripts;
+                run();
+            }, 500);
+        </script>
+
+
+<script id="scripts">const run = () => {
+    synchronous(() => log("synchronous 1"));
+    microtask(() => log("microtask 1"));
+    taskSetImmediate(() => log("taskSetImmediate 1")); // Node only
+    taskSetTimeout(() => log("taskSetTimeout 1"));
+    taskMessageChannel(() => log("taskMessageChannel 1"));
+    microtask(() => log("microtask 2"));
+    nanotask(() => log("nanotask 1")); // Node only
+    synchronous(() => log("synchronous 2"));
+    microtask(() => log("microtask 3"));
+    taskMessageChannel(() => log("taskMessageChannel 2"));
+};</script>
+    </body>
+</html>
