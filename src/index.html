@@ -23,7 +23,7 @@
 
             .console {
                 padding: 1em;
-                width: calc(50% - 0.5em);
+                width: calc(40% - 0.5em);
                 background: #eee;
                 border: 1px solid #ccc;
                 white-space: pre-wrap;
@@ -31,6 +31,7 @@
 
             .console:not(:last-child) {
                 margin-right: 1em;
+                width: calc(60% - 0.5em);
             }
         </style>
     </head>
@@ -38,7 +39,10 @@
         <div class="container">
             <h1>Task queue scheduling</h1>
 
-            <a href="/task-utils.js" target="_blank" rel="noopener noreferrer">Task Utils (/task-utils.js)</a>
+            <p>
+                TaskUtils contains all of the functions being run.
+                <a href="/task-utils.js" target="_blank" rel="noopener noreferrer">/task-utils.js</a>
+            </p>
 
             <div class="consoles">
                 <pre class="console" id="script-console"><h2>Tests ran</h2></pre>
@@ -82,15 +86,17 @@
 
 <script id="scripts">const run = () => {
     synchronous(() => log("synchronous 1"));
-    microtask(() => log("microtask 1"));
+    microtaskPromise(() => log("microtaskPromise 1"));
     taskSetImmediate(() => log("taskSetImmediate 1")); // Node only
     taskSetTimeout(() => log("taskSetTimeout 1"));
     taskMessageChannel(() => log("taskMessageChannel 1"));
-    microtask(() => log("microtask 2"));
+    microtaskPromise(() => log("microtaskPromise 2"));
+    microtaskQueueMicrotask(() => log("microtaskQueueMicrotask 1"));
     nanotask(() => log("nanotask 1")); // Node only
     synchronous(() => log("synchronous 2"));
-    microtask(() => log("microtask 3"));
+    microtaskPromise(() => log("microtaskPromise 3"));
     taskMessageChannel(() => log("taskMessageChannel 2"));
+    microtaskQueueMicrotask(() => log("microtaskQueueMicrotask 2"));
 };</script>
     </body>
 </html>
